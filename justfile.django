@@ -12,7 +12,7 @@ runserver: check-venv
     ./manage.py runserver
 
 # Create Django project
-create: check-venv
+start: check-venv
     django-admin startproject main .
 
 # Launch Django interactive shell
