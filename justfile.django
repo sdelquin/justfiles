@@ -132,6 +132,18 @@ enable-vscode-pytest:
     }
     EOF
 
+# Start postgresql server
+[private]
+postgres:
+    #!/usr/bin/env bash
+    if [[ $(grep -i postgres $(find . -name settings.py)) ]]; then
+        if   [[ $OSTYPE == "linux-gnu"* ]]; then
+            pgrep -x postgres &> /dev/null || sudo service postgresql start
+        elif [[ $OSTYPE == "darwin"* ]]; then
+            pgrep -x postgres &> /dev/null || (open /Applications/Postgres.app && sleep 2)
+        fi
+    fi
+
 # Start redis server
 [private]
 redis:
