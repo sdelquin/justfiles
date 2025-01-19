@@ -116,9 +116,9 @@ reset-db: && create-su
     ./manage.py migrate
     echo
 
-# Launch worker for Redis Queue (RQ)
+# Launch worker for Redis Queue (RQ). Requires "pip install watchdog"
 rq: check-venv redis
-    ./manage.py rqworker
+    watchmedo auto-restart --directory=. --pattern=tasks.py --recursive -- ./manage.py rqworker
 
 # ==============================================================================
 # MISC RECIPES
