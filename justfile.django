@@ -8,7 +8,7 @@ pip-cmd := shell('if [ -x "$(command -v uv)" ]; then echo "uv pip"; else echo "p
 # ==============================================================================
 
 # Launch development server
-runserver: check-venv
+runserver: check-venv kill-runservers
     ./manage.py runserver
 
 # Create Django project
@@ -119,6 +119,15 @@ reset-db: && create-su
 # Launch worker for Redis Queue (RQ). Requires "pip install watchdog"
 rq: check-venv redis
     watchmedo auto-restart --pattern=tasks.py --recursive -- ./manage.py rqworker
+
+# Kill all Django runserver processes
+[private]
+kill-runservers:
+    #!/usr/bin/env bash
+    for pid in $(ps aux | grep '[Pp]ython.*manage.py runserver' | awk '{ print $2 }')
+    do
+        kill -9 $pid
+    done
 
 # ==============================================================================
 # MISC RECIPES
